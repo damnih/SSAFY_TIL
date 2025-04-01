@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>NEW</h1>
+  <form action="{% url "articles:create" %}" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit">
+    
+    {% comment %} 
+    form.as_p 의 기능이 뭐냐면 
+    저 폼에 있는 애들을 하나하나 p태그로 감싸준 거임  
+    as_div, as_table, as_ul 등이 더 있음 
+    {% endcomment %}
+
+    {% comment %} <div>
+      <label for="title">Title: </label>
+      <input type="text" name="title" id="title">
+    </div>
+    <div>
+      <label for="content">Content: </label>
+      <textarea name="content" id="content"></textarea>
+    </div> {% endcomment %}
+  </form>
+  <hr>
+  <a href="{% url "articles:index" %}">[back]</a>
+</body>
+</html>
