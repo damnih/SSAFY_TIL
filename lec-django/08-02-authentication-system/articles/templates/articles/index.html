@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+
+  <h1>Articles</h1>
+  {% if request.user.is_authenticated %}
+  {% comment %} {% if user.is_authenticated %} 와 동일 {% endcomment %}
+    <h1>안녕하세요, {{ user.username }}님</h1>
+    <a href="{% url "articles:create" %}">CREATE</a>
+
+    <form action="{% url "accounts:logout" %}" method="POST">
+      {% csrf_token %}
+      <input type="submit" value="로그아웃">
+    </form>
+    
+    {% comment %} 여기엔 이제 회원탈퇴를 해보고싶엉 {% endcomment %}
+    <form action="{% url "accounts:delete" %}" method="POST">
+      {% csrf_token %}
+      <input type="submit" value="회원탈퇴">
+    </form>
+    {% comment %} 여기엔 이제 회원정보수정을 해보고싶엉 {% endcomment %}
+    <a href="{% url "accounts:update" %}">[회원정보수정]</a>
+  
+  {% else %}
+
+  <a href="{% url "accounts:login" %}">로그인</a>  
+  {% comment %} 여기에 회원가입 링크를 달아주고 싶엉 {% endcomment %}
+  <a href="{% url "accounts:signup" %}">[회원가입]</a>
+
+  {% endif %}
+
+
+
+  <hr>
+  {% for article in articles %}
+    <p>글 번호: {{ article.pk }}</p>
+    <a href="{% url "articles:detail" article.pk %}">
+      <p>글 제목: {{ article.title }}</p>
+    </a>
+    <p>글 내용: {{ article.content }}</p>
+    <hr>
+  {% endfor %}
+
+
+
+</body>
+</html>
