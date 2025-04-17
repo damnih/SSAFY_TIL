@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>저자 전체 목록</h1>
+  {% comment %} 이제 해야 하는 거는 author들을 그대로 받아와서 여기야 
+  ul로 하나하나 넣어주는 거임 
+  근데 author는 context로 받아줘야겠지?? 
+
+  
+  {% endcomment %}
+
+  {% comment %} 여긴 내가 만든 코드 {% endcomment %}
+  {% comment %} {% for author in authors %}
+    <ul> {{ author }} </ul>
+  {% endfor %} {% endcomment %}
+  <ul>
+    {% for author in authors %}
+    <a href='{% url "libraries:detail" author.pk %}'>  
+      <li>
+        이름 : {{ author.name }}
+      </li>
+      <li>
+        국적 : {{ author.nationality }}
+      </li>
+    </a>
+    {% endfor %}
+  </ul>
+
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>DETAIL</h1>
+  <h2>{{ article.pk }} 번째 글</h2>
+  <hr>
+  <p>작성자 : {{ article.user }}</p>
+  <p>제목 : {{ article.title }}</p>
+  <p>내용 : {{ article.content }}</p>
+  <p>작성일 : {{ article.created_at }}</p>
+  <p>수정일 : {{ article.updated_at }}</p>
+  <hr>
+  {% if request.user == article.user %}
+    <a href="{% url "articles:update" article.pk %}">[UPDATE]</a>
+    <form action="{% url "articles:delete" article.pk %}" method="POST">
+      {% csrf_token %}
+      <input type="submit" value="삭제">
+    </form>
+  {% endif %}
+
+  {% comment %} 여기에 좋아요 기능 구현 {% endcomment %}
+ 
+  {% comment %} 이거 사실상 링크를 통해서 동작을 실행하게 하는 거잖아? 나는 그래서 무지성으로 a태그를 쓰려다가
+  순간 팔로우언팔로우 할 때 form 썼다는 걸 상기하고 바꿨거든?? 
+  a태그와 form태그의 차이가 뭐냐 
+  
+  
+  {% endcomment %}
+
+  <hr>
+  {% comment %} 댓글 작성 Form {% endcomment %}
+  <form action="{% url "articles:comments_create" article.pk  %}" method="POST">
+    {% csrf_token %}
+    {{ comment_form }}
+    <input type="submit">
+  </form>
+  <hr>
+  {% comment %} 댓글 목록 {% endcomment %}
+  <h2>댓글 목록</h2>
+  <ul>
+    {% for comment in comments %}
+      <li>
+        {{ comment.user }} - {{ comment.content }}
+        {% if request.user == comment.user %}
+          <form action="{% url "articles:comments_delete" article.pk comment.pk %}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="삭제">
+          </form>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+  <a href="{% url "articles:index" %}">[back]</a>
+</body>
+</html>

@@ -1,0 +1,104 @@
+{% extends 'formsapp/base.html' %}
+
+{% block content %}
+<div class="form-container">
+  <div class="form-header">
+    <h2>Widget Form</h2>
+    <p class="text-muted">Django Forms에서 위젯을 사용하여 HTML 렌더링을 커스터마이즈하는 예시입니다.</p>
+  </div>
+
+
+  <div class="form-section">
+    <h4>Widget Form 렌더링 결과</h4>
+    <div class="card">
+      <div class="card-body">
+        <form method="post" action="">
+          {% csrf_token %}
+          <div class="mb-3">
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">제출</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h4>주요 위젯 종류</h4>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>위젯</th>
+            <th>설명</th>
+            <th>HTML 결과</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>TextInput</code></td>
+            <td>텍스트 입력 위젯</td>
+            <td><code>&lt;input type="text"&gt;</code></td>
+          </tr>
+          <tr>
+            <td><code>Textarea</code></td>
+            <td>여러 줄 텍스트 입력 위젯</td>
+            <td><code>&lt;textarea&gt;</code></td>
+          </tr>
+          <tr>
+            <td><code>NumberInput</code></td>
+            <td>숫자 입력 위젯</td>
+            <td><code>&lt;input type="number"&gt;</code></td>
+          </tr>
+          <tr>
+            <td><code>EmailInput</code></td>
+            <td>이메일 입력 위젯</td>
+            <td><code>&lt;input type="email"&gt;</code></td>
+          </tr>
+          <tr>
+            <td><code>URLInput</code></td>
+            <td>URL 입력 위젯</td>
+            <td><code>&lt;input type="url"&gt;</code></td>
+          </tr>
+          <tr>
+            <td><code>PasswordInput</code></td>
+            <td>비밀번호 입력 위젯</td>
+            <td><code>&lt;input type="password"&gt;</code></td>
+          </tr>
+          <tr>
+            <td><code>CheckboxInput</code></td>
+            <td>체크박스 위젯</td>
+            <td><code>&lt;input type="checkbox"&gt;</code></td>
+          </tr>
+          <tr>
+            <td><code>Select</code></td>
+            <td>드롭다운 선택 위젯</td>
+            <td><code>&lt;select&gt;</code></td>
+          </tr>
+          <tr>
+            <td><code>RadioSelect</code></td>
+            <td>라디오 버튼 위젯</td>
+            <td><code>&lt;input type="radio"&gt;</code></td>
+          </tr>
+          <tr>
+            <td><code>CheckboxSelectMultiple</code></td>
+            <td>다중 체크박스 위젯</td>
+            <td>여러 개의 <code>&lt;input type="checkbox"&gt;</code></td>
+          </tr>
+          <tr>
+            <td><code>FileInput</code></td>
+            <td>파일 업로드 위젯</td>
+            <td><code>&lt;input type="file"&gt;</code></td>
+          </tr>
+          <tr>
+            <td><code>DateInput</code></td>
+            <td>날짜 선택 위젯</td>
+            <td><code>&lt;input type="date"&gt;</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+{% endblock %} 

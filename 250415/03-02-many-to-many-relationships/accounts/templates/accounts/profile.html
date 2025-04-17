@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>{{ person.username }}의 프로필 페이지 </h1>
+
+{% comment %} html에서 조회할 때는,, () 필요 없는거임!!!!!!!  {% endcomment %}
+
+  <div>
+    팔로잉 : {{ person.followings.all|length }}
+    팔로워 : {{ person.followers.all|length }}
+  </div>
+
+  {% comment %} 여기에 팔로우 버튼 만들어보자 {% endcomment %}
+  
+  {% comment %} 근데 이 팔로잉 버튼을 애초에 남일때만 보여지게 하고 싶어 그니깐 여기에 이프태그 ㄱㄱ  {% endcomment %}
+  {% if request.user != person %}
+    <form action="{% url "accounts:follow" person.pk %}" method="POST">
+      {% comment %} 나는 이미 요청에 정보가 다 들어가있어 
+      근데 팔로우를 하고 싶으면 상대가 누군지를 알아야하잖아 
+      나는 안넘겨도 알아
+      즉 넘겨줘야 할 거는? 상대방에 대한 정보다
+      user.pk가 아니라 
+      person.pk를 넘겨줘야 하는 거임 {% endcomment %}
+      {% csrf_token %}
+      {% if request.user in person.followers.all %}
+      {% comment %} 내가 이미 저 사람 팔로워 목록에 있다면 {% endcomment %}
+      {% comment %} # # # 오답!!!! <a href="{% url "" %}"></a> {% endcomment %}
+      {% comment %} 아 이거 이미 form태그 안에서 실행하고 있는 거라 링크 걸어줄 a태그는 여기서 필요하지 않음  {% endcomment %}
+      <input type="submit" value='언팔로우'> 
+      {% else %}
+      {% comment %} 없다면 {% endcomment %}
+      <input type="submit" value='팔로우'>
+      {% endif %}
+  </form>
+  {% endif %}
+
+
+  <hr>
+  <h2>{{ person.username }}가 작성한 게시글 </h2>
+  {% for article in person.article_set.all %}
+  {% comment %} 걍 역참조해서 여기서 바로 조회할 수도 있는거임 따로 받아오지 않고도 !!!  {% endcomment %}
+  <p> {{ article.title }} </p>
+  {% endfor %}
+  <hr>
+
+  <h2>{{ person.username }}가 작성한 댓글글 </h2>
+  {% for comment in person.comment_set.all %}
+  {% comment %} 역참조 가능 !!!  {% endcomment %}
+  <p> {{ comment.content }} 
+    {% comment %} 코멘트라는 인스턴스 안의 내용 ㅇㅇ 
+    이거 왜 안됐냐,, 내 오타가 있었음 
+    comment_set은 역참조 집단이고, 그 뒤에 all 메서드를 써주는거잖아
+    근데 왜 . 안찍었냐고~!  {% endcomment %}
+  </p>
+
+  {% endfor %}
+  <hr>
+  <h2>{{ person.username }}가 좋아요를 누른 게시글  </h2>
+  
+  {% for article in person.like_articles.all %}
+    {% comment %} like_articles.all
+  이거는 이름을 내가 바꿔줬었지 ㅇㅇ  {% endcomment %}
+  
+  {% endfor %}
+
+
+  {% comment %} 
+  이 세개를 그냥 뷰 함수롣
+  
+  {% endcomment %}
+
+
+  <hr>
+{% comment %} {{ person.username }} {% endcomment %}
+</body>
+</html>

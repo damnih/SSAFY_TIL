@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row mb-4">
+  <div class="col-md-8">
+    <h1 class="mb-4">할 일 목록</h1>
+  </div>
+  <div class="col-md-4 text-end">
+    <a href="{% url 'todos:create' %}" class="btn btn-primary">
+      <i class="bi bi-plus-circle"></i> 새 할 일
+    </a>
+  </div>
+</div>
+
+<div class="row">
+  {% if todos %}
+    {% for todo in todos %}
+      <div class="col-md-4 mb-4">
+        <div class="card todo-card h-100">
+          <div class="card-header p-2">
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="badge {% if todo.priority == 1 %}bg-info{% elif todo.priority == 2 %}bg-warning{% else %}bg-danger{% endif %}">
+                {{ todo.get_priority_display }}
+              </span>
+              <span class="badge bg-primary">
+                {{ todo.get_status_display }}
+              </span>
+            </div>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title {% if todo.completed %}completed{% endif %}">{{ todo.title }}</h5>
+            <p class="card-text {% if todo.completed %}completed{% endif %}">{{ todo.content|truncatewords:20 }}</p>
+            <div class="mt-auto">
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" {% if todo.completed %}checked{% endif %} disabled>
+                <label class="form-check-label" for="completedCheck">
+                  {% if todo.completed %}완료{% else %}미완료{% endif %}
+                </label>
+              </div>
+              <div class="todo-actions">
+                <a href="{% url 'todos:detail' todo.pk %}" class="btn btn-sm btn-info">상세</a>
+                <a href="{% url 'todos:update' todo.pk %}" class="btn btn-sm btn-warning">수정</a>
+                <form action="{% url 'todos:delete' todo.pk %}" method="POST" class="d-inline">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-sm btn-danger">삭제</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="col-12">
+      <div class="alert alert-info" role="alert">
+        <h4 class="alert-heading">할 일이 없습니다!</h4>
+        <p>새로운 할 일을 추가해보세요.</p>
+        <hr>
+        <a href="{% url 'todos:create' %}" class="btn btn-primary">할 일 추가하기</a>
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% endblock content %} 

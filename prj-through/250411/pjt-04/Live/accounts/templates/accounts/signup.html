@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-6 mx-auto">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white">
+        <h2 class="mb-0 fs-4">회원가입</h2>
+      </div>
+      <div class="card-body p-4">
+        <form action="{% url 'accounts:signup' %}" method="POST">
+          {% csrf_token %}
+          
+          <div class="mb-3">
+            <label for="{{ form.username.id_for_label }}" class="form-label">사용자 이름</label>
+            {{ form.username }}
+            {% if form.username.errors %}
+              <div class="text-danger">
+                {% for error in form.username.errors %}
+                  <small>{{ error }}</small>
+                {% endfor %}
+              </div>
+            {% endif %}
+            <div class="form-text">
+              150자 이하의 문자, 숫자 및 @/./+/-/_만 사용 가능합니다.
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <label for="{{ form.password1.id_for_label }}" class="form-label">비밀번호</label>
+            {{ form.password1 }}
+            {% if form.password1.errors %}
+              <div class="text-danger">
+                {% for error in form.password1.errors %}
+                  <small>{{ error }}</small>
+                {% endfor %}
+              </div>
+            {% endif %}
+            <div class="form-text">
+              <ul>
+                <li>비밀번호는 최소 8자 이상이어야 합니다.</li>
+                <li>비밀번호는 일반적인 것이 아니어야 합니다.</li>
+                <li>비밀번호는 숫자만으로 이루어질 수 없습니다.</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <label for="{{ form.password2.id_for_label }}" class="form-label">비밀번호 확인</label>
+            {{ form.password2 }}
+            {% if form.password2.errors %}
+              <div class="text-danger">
+                {% for error in form.password2.errors %}
+                  <small>{{ error }}</small>
+                {% endfor %}
+              </div>
+            {% endif %}
+            <div class="form-text">
+              확인을 위해 이전과 동일한 비밀번호를 입력하세요.
+            </div>
+          </div>
+          
+          {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+              {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+          
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary">회원가입</button>
+          </div>
+        </form>
+      </div>
+      <div class="card-footer text-center py-3">
+        <p class="mb-0">이미 계정이 있으신가요? <a href="{% url 'accounts:login' %}">로그인</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %} 

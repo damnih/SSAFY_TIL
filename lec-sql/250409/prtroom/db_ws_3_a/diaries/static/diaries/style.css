@@ -1,0 +1,23 @@
+.diaries {
+  list-style-type: none;
+}
+
+.diaries-main {
+  display: flex;
+}
+
+.diaries-main,
+.diaries-comment {
+  margin: 30px;
+  text-align: center;
+  height: 650px;
+}
+
+.diaries-comment {
+  width: 100%;
+  min-width: 600px;
+  padding: 10px;
+  border: 1px solid black;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}

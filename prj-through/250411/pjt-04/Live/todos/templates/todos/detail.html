@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row mb-4">
+  <div class="col-12">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'todos:index' %}">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Todo Detail</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-8 mb-4">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 {% if todo.completed %}completed{% endif %}">{{ todo.title }}</h5>
+        <div>
+          <span class="badge {% if todo.completed %}bg-success{% else %}bg-warning{% endif %} me-1">
+            {% if todo.completed %}완료{% else %}미완료{% endif %}
+          </span>
+          <span class="badge bg-primary me-1">
+            {{ todo.get_status_display }}
+          </span>
+          <span class="badge {% if todo.priority == 1 %}bg-info{% elif todo.priority == 2 %}bg-warning{% else %}bg-danger{% endif %}">
+            {{ todo.get_priority_display }}
+          </span>
+        </div>
+      </div>
+      <div class="card-body">
+        <p class="card-text {% if todo.completed %}completed{% endif %}">{{ todo.content }}</p>
+        <hr>
+        <div class="row">
+          <div class="col-md-6">
+            <p><strong>상태:</strong> {{ todo.get_status_display }}</p>
+          </div>
+          <div class="col-md-6">
+            <p><strong>우선순위:</strong> {{ todo.get_priority_display }}</p>
+          </div>
+        </div>
+        <hr>
+        <small class="text-muted">작성일: {{ todo.created_at|date:"Y년 m월 d일, H:i" }}</small>
+        {% if todo.updated_at %}
+          <br>
+          <small class="text-muted">최종 수정일: {{ todo.updated_at|date:"Y년 m월 d일, H:i" }}</small>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">Actions</h5>
+      </div>
+      <div class="card-body">
+        <div class="d-grid gap-2">
+          <a href="{% url 'todos:update' todo.pk %}" class="btn btn-warning">
+            Edit Todo
+          </a>
+          <form action="{% url 'todos:delete' todo.pk %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger w-100">Delete Todo</button>
+          </form>
+          <a href="{% url 'todos:index' %}" class="btn btn-secondary">
+            Back to List
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %} 

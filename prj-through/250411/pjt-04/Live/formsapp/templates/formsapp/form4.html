@@ -1,0 +1,26 @@
+{% extends 'formsapp/base.html' %}
+
+{% block content %}
+<div class="form-container">
+  <div class="form-header">
+    <h2>상속된 Form</h2>
+    <p class="text-muted">Django Forms의 상속을 통해 기능을 확장하는 예시입니다.</p>
+  </div>
+
+
+  <div class="form-section">
+    <h4>상속된 Form 렌더링 결과</h4>
+    <div class="card">
+      <div class="card-body">
+        <form method="post" action="">
+          {% csrf_token %}
+          <div class="mb-3">
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">제출</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} 

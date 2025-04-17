@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>책 전체 목록 </h1>
+  {% for book in books %}
+  <a href="{% url "libraries:detail" book.pk %}">
+    <ul> 제목 : {{ book.title }} </ul>
+  </a>
+  {% endfor %}
+</body>##
+</html>

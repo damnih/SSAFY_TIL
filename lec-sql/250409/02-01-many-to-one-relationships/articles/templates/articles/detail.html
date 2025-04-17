@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>DETAIL</h1>
+  <h2>{{ article.pk }} 번째 글</h2>
+  <hr>
+  <p>제목 : {{ article.title }}</p>
+  <p>내용 : {{ article.content }}</p>
+  <p>작성일 : {{ article.created_at }}</p>
+  <p>수정일 : {{ article.updated_at }}</p>
+  <hr>
+{% comment %} 댓글 작성 {% endcomment %}
+<form action="{% url "articles:comments_create" article.pk %}" method='POST'>
+  {% csrf_token %}
+  {{ comment_form }}
+  <input type="submit">
+
+</form>
+ {% comment %} 댓글 목록  {% endcomment %}
+<h2>댓글 목록 </h2>
+<ul>
+  {% for comment in comments %}
+    <li>{{ comment.content }}
+      {% comment %} 각 코멘트 옆에다가 삭제 버튼을 만들 거니깐 
+      이 li태그 안에 들어가있어줘야함  {% endcomment %}
+      {% comment %} 각각의 댓글마다도 pk값이 존재할테고 그게 다 다를테니깐 
+      특정 댓글을 삭제하고 싶을 떄는 그 pk값을 활용하면 되겟당  {% endcomment %}
+      <form action="{% url "articles:comments_delete" article.pk comment.pk %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value='삭제'>
+      </form>
+    </li>
+  {% endfor %}
+</ul>
+  <a href="{% url "articles:update" article.pk %}">[UPDATE]</a>
+  <form action="{% url "articles:delete" article.pk %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="삭제">
+  </form>
+  <a href="{% url "articles:index" %}">[back]</a>
+</body>
+</html>

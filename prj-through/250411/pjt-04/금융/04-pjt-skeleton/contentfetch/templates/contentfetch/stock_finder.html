@@ -1,0 +1,111 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주식 찾기</title>
+    <style>
+        .container {
+            border-left: 10px solid black;
+            padding-left: 15px;
+        }
+        .subtitle {
+            font-size: 16px;
+            font-weight: normal;
+            color: #333;
+        }
+        .title {
+            font-size: 36px;
+            font-weight: bold;
+            color: black;
+            margin-top: 10px;
+        }
+        .loading-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .loading-gif {
+            width: 25px;
+            height: 25px;
+        }
+        .loading-text {
+            font-size: 14px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="subtitle">주식에 대한, 투자자들의 목소리</div>
+        <div class="title">주식 댓글 분석기</div>
+    </div>
+
+    <form method="POST" action="{% url 'stock_finder' %}" id="searchForm">
+        {% csrf_token %}
+        <label for="company">회사 이름을 입력하세요:</label>
+        <input id="company" type="text" name="company_name" value="{{ company_name|default:'' }}" {% if is_loading %}readonly{% endif %}>
+        {% if form_data %}
+            <input type="hidden" name="loading_step" value="{{ form_data.loading_step }}">
+        {% endif %}
+        <button type="submit" {% if is_loading %}disabled{% endif %}>검색</button>
+    </form>
+
+    {% if is_loading %}
+        {% if loading_step == 'selenium' %}
+        <div class="loading-container">
+            <!-- GIF 파일 -->
+            <img class="loading-gif" src="{% static 'admin/img/loading.gif' %}" alt="Loading...">
+            <!-- 로딩 텍스트 -->
+            <div class="loading-text">
+                <h3>"{{ company_name }}" 데이터 수집 및 분석 중...</h3>
+                <p>토스 증권에서 댓글을 수집하고 'gpt-4o-mini' 모델을 이용하여 수집된 댓글을 분석하고 있습니다. 잠시만 기다려주세요.</p>
+            </div>
+        </div>
+        <form method="POST" action="{% url 'stock_finder' %}" id="progressForm">
+            {% csrf_token %}
+            <input id="company" type="hidden" name="company_name" value="{{ company_name }}">
+            <input type="hidden" name="loading_step" value="selenium">
+        </form>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                setTimeout(function() {
+                    document.getElementById('progressForm').submit();
+                }, 1000);
+            });
+        </script>
+        {% endif %}
+    {% else %}
+        {% if error_message %}
+            <div class="error-message">
+                {{ error_message }}
+            </div>
+        {% endif %}
+
+        {% if company_name %}
+            <h2>{{ company_name }} {% if stock_code %}({{ stock_code }}){% endif %}</h2>
+            {% if comments %}
+                <h3>수집된 댓글:</h3>
+                <ul>
+                {% for comment in comments %}
+                    <li>{{ comment }}
+                    <form method="POST" action="{% url 'delete_comment' %}" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="stock_code" value="{{ stock_code }}">
+                        <input type="hidden" name="comment_index" value="{{ forloop.counter0 }}">
+                        <button type="submit">삭제</button>
+                    </form>
+                    </li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+
+            {% if chatgpt_response %}
+                <h3>'gpt-4o-mini' 분석:</h3>
+                <p>{{ chatgpt_response }}</p>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,104 @@
+{% extends 'formsapp/base.html' %}
+
+{% block content %}
+<div class="form-container">
+  <div class="form-header">
+    <h2>Django의 일반 Form</h2>
+    <p class="text-muted">Form 클래스를 사용하여 직접 정의한 양식입니다.</p>
+  </div>
+
+  <div class="form-section">
+    <h4>Form 렌더링 결과</h4>
+    <div class="card">
+      <div class="card-body">
+        <form method="post" action="">
+          {% csrf_token %}
+          
+          <div class="mb-3">
+            <table class="table">
+              {{ form.as_table }}
+            </table>
+            <button type="submit" class="btn btn-primary">제출</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h4>다양한 렌더링 방식</h4>
+    
+    <div class="accordion" id="renderingAccordion">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+            form.as_p - 단락으로 렌더링
+          </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#renderingAccordion">
+          <div class="accordion-body">
+            <form method="post" action="">
+              {% csrf_token %}
+              {{ form.as_p }}
+              <button type="submit" class="btn btn-primary">제출</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+            form.as_ul - 리스트로 렌더링
+          </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#renderingAccordion">
+          <div class="accordion-body">
+            <form method="post" action="">
+              {% csrf_token %}
+              <ul>
+                {{ form.as_ul }}
+              </ul>
+              <button type="submit" class="btn btn-primary">제출</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+            개별 필드 수동 렌더링
+          </button>
+        </h2>
+        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#renderingAccordion">
+          <div class="accordion-body">
+            <form method="post" action="">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label for="{{ form.subject.id_for_label }}" class="form-label">제목</label>
+                {{ form.subject }}
+                {% if form.subject.errors %}
+                  <div class="alert alert-danger">
+                    {{ form.subject.errors }}
+                  </div>
+                {% endif %}
+              </div>
+              <div class="mb-3">
+                <label for="{{ form.message.id_for_label }}" class="form-label">메시지</label>
+                {{ form.message }}
+                {% if form.message.errors %}
+                  <div class="alert alert-danger">
+                    {{ form.message.errors }}
+                  </div>
+                {% endif %}
+              </div>
+              <button type="submit" class="btn btn-primary">제출</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} 

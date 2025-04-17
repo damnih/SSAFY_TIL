@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+
+  <h1>Articles</h1>
+  {% comment %} {% if user.is_authenticated %} {% endcomment %}
+  {% if request.user.is_authenticated %}
+    <h1>안녕하세요, {{ user.username }}님</h1>
+    <a href="{% url "articles:create" %}">CREATE</a>
+    <form action="{% url "accounts:logout" %}" method="POST">
+      {% csrf_token %}
+      <input type="submit" value="로그아웃">
+    </form>
+    <form action="{% url "accounts:delete" %}" method="POST">
+      {% csrf_token %}
+      <input type="submit" value="회원탈퇴">
+    </form>
+    <a href="{% url "accounts:update" %}">회원정보 수정</a>
+  {% else %}
+    <a href="{% url "accounts:login" %}">로그인</a>
+    <a href="{% url "accounts:signup" %}">회원가입</a>
+  {% endif %}
+
+  <hr>
+
+  {% for article in articles %}
+    <p>작성자 : {{ article.user }}</p>
+    {% comment %} <p>작성자 : {{ article.user.username }}</p> {% endcomment %}
+    <p>글 번호: {{ article.pk }}</p>
+    <a href="{% url "articles:detail" article.pk %}">
+      <p>글 제목: {{ article.title }}</p>
+    </a>
+    <p>글 내용: {{ article.content }}</p>
+    {% comment %} 좋아요 요청은 당연히 포스트겠지? 게시글에 변화가 생기는 거니깐! {% endcomment %}
+    <form action="{% url "articles:likes" article.pk %}" method="POST">
+      {% csrf_token %}
+      {% if request.user in article.like_users.all %}
+      <input type="submit" value="좋아요 취소">
+      {% else %}
+      <input type="submit" value="좋아요">
+      {% endif %}
+    </form>
+    <hr>
+  {% endfor %}
+</body>
+</html>

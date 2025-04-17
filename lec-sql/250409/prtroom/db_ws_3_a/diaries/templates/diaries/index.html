@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block style %}
+  <link rel="stylesheet" href="{% static "diaries/style.css" %}">
+{% endblock style %}
+
+{% block content %}
+  <h1>일기장</h1>
+  <a href="{% url "diaries:create" %}">[일기 쓰기]</a>
+  <ul>
+    {% for diary in diaries %}
+      <li>
+        <p>작성일 : {{ diary.created_at }}</p>
+        {% if diary.picture %}
+          <img src="{{ diary.picture.url }}" alt="{{ diary.picture }}">
+        {% else %}
+          <img src="{% static "diaries/default.png" %}" alt="{{ diary.picture }}">
+        {% endif %}
+        <p>{{ diary.content }}</p>
+        <p>
+          {% comment %} 여기에 댓글창을 삽입 {% endcomment %}
+          {% for comment in comments %}
+          <li>
+            {{ comment.content }}
+          </li>
+          {% empty %}
+          <li>아직 댓글이 없습니다</li>
+          {% endfor %}
+        </p>
+        <p>
+          {% comment %} 댓글 작성창 여기에~! {% endcomment %}
+          <form action=" {% url "diaries:create_comments" %}  article.pk " method="POST"> 
+            <input type="submit" value="댓글 생성">
+          </form>
+        </p>
+      </li>
+    {% empty %}
+      <li>아직 작성한 일기가 없습니다.</li>
+    {% endfor %}
+  </ul>
+{% endblock content %}
