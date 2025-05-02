@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}{{ post.title }}{% endblock title %}
+{% block content %}
+<div class="card mb-4">
+    {% if post.image %}
+        <img src="{{ post.image.url }}" alt="Post Image" class="card-img-top" style="width: 100%; height: 300px; object-fit: cover;">
+    {% comment %} 문제 3
+    이미지가 없는 경우 대체 이미지 출력 
+    static 이용
+     {% endcomment %}
+    {% else %}
+        {% load static %}
+        <img src="{% static "assets/default_image.png" %}" alt="Default Image" style="width: 100%; height: 300px; object-fit: cover;">
+        
+    {% endif %}
+    <div class="card-body">
+        <h1 class="card-title">{{ post.title }}</h1>
+        <h6 class="card-subtitle mb-2 text-muted">By 
+            <a href="{% url 'accounts:profile' post.user.username %}">
+                {{ post.user.username }}
+            </a>
+        </h6>
+        <p class="card-text">{{ post.content }}</p>
+        <div class="text-muted mb-3">
+            Posted on {{ post.created_at|date:"F d, Y" }}
+        </div>
+        
+        {% if user == post.user %}
+        <div class="btn-group">
+            <a href="{% url 'posts:update' post.pk %}" class="btn btn-outline-primary">수정</a>
+            <form action="{% url 'posts:delete' post.pk %}" method="POST" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-danger">삭제</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h4>댓글</h4>
+        {% if user.is_authenticated %}
+        <form action="{% url 'posts:comment_create' post.pk %}" method="POST" class="mb-4">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <button type="submit" class="btn btn-primary">댓글 작성</button>
+        </form>
+        {% endif %}
+
+        {% for comment in post.comments.all %}
+        <div class="card mb-2">
+            <div class="card-body">
+                <p class="card-text">{{ comment.content }}</p>
+                <small class="text-muted">
+                    By 
+            <a href="{% url 'accounts:profile' post.user %}">
+                    <a href="{% url 'accounts:profile' comment.user %}">
+                        {{ comment.user.username }}
+                    </a>
+                    on {{ comment.created_at|date:"F d, Y" }}
+                    {% if user == comment.user %}
+                    {% comment %} 문제 9
+                    여기를 수정해서 댓글 삭제 기능이 구현되게 하면 되는 건데 
+                    
+                    {% endcomment %}
+                    <form action="{% url 'posts:comment_delete' post.pk comment.pk %}" method="POST" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-danger">삭제</button>
+                    </form>
+                    {% endif %}
+                </small>
+            </div>
+        </div>
+        {% empty %}
+        <p>댓글이 없습니다.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %} 

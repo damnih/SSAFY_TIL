@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ user.username }}'s 프로필{% endblock title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="card-title">{{ user.username }}</h2>
+                <p class="card-text">
+                    <strong>이메일:</strong> {{ user.email }}<br>
+                    <strong>가입일:</strong> {{ user.date_joined|date:"F d, Y" }}
+                </p>
+                <div class="d-flex justify-content-between">
+                    {% comment %} url 형식에 맞게 적절한 변수 값을 제공해야 한다 {% endcomment %}
+                    <a href="{% url 'accounts:following' user.pk %}" class="btn btn-outline-primary">
+                        팔로잉 ({{ user.followings.count }})
+                    </a>
+                    <a href="{% url 'accounts:followers' user.pk %}" class="btn btn-outline-primary">
+                        팔로워 ({{ user.followers.count }})
+                    </a>
+                </div>
+                {% if request.user != user %}
+                <form action="{% url 'accounts:follow' user.pk %}" method="POST" class="mt-3">
+                    {% csrf_token %}
+                    {% if request.user in user.followers.all %}
+                        <button type="submit" class="btn btn-danger w-100">언팔로우</button>
+                    {% else %}
+                        <button type="submit" class="btn btn-primary w-100">팔로우</button>
+                    {% endif %}
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <h3 class="mb-4">{{ user.username }}의 게시글</h3>
+        {% for post in user.posts.all %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ post.title }}</h5>
+                <p class="card-text">{{ post.content|truncatewords:30 }}</p>
+                <a href="{% url 'posts:detail' post.pk %}" class="btn btn-outline-primary">더 보기</a>
+            </div>
+            <div class="card-footer text-muted">
+                Posted on {{ post.created_at|date:"F d, Y" }}
+            </div>
+        </div>
+        {% empty %}
+        <p>게시글이 없습니다.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %} 

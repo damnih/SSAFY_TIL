@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ user.username }}'s 팔로워{% endblock title %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h1 class="card-title mb-4">{{ user.username }}'s 팔로워</h1>
+        <div class="row">
+            {% for follower in user.followers.all %}
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ follower.username }}</h5>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                가입일 {{ follower.date_joined|date:"F d, Y" }}
+                            </small>
+                        </p>
+                        <a href="{% url 'accounts:profile' follower.username %}" class="btn btn-outline-primary">프로필 보기</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <p>팔로워가 없습니다.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content %} 

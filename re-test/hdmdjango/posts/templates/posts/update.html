@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>수정 페이지</h1>
+<form action="{% url 'posts:update' post.pk %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="수정">
+    <a href="{% url 'posts:detail' post.pk %}">취소</a>
+</form>
+{% endblock %}

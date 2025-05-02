@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock title %}
+
+{% block content %}
+<h1 class="mb-4">게시글</h1>
+    {% comment %} 로그인 된 사용자만 버튼이 보이게 수정 {% endcomment %}
+    {% if request.user.is_authenticated %}
+        <a href="{% url 'posts:create' %}" class="btn btn-primary mb-3">글 작성</a>
+    {% endif %}
+
+<div class="row">
+    {% for post in posts %}
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-body">
+                {% if post.image %}
+                <img src="{{ post.image.url }}" alt="Post Image" class="card-img-top">
+                {% endif %}
+                <h5 class="card-title">{{ post.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">By 
+                    <a href="{% url 'accounts:profile' post.user %}">
+                        {{ post.user }}
+                    </a>
+                </h6>
+                <p class="card-text">{{ post.content|truncatewords:30 }}</p>
+                <a href="{% url 'posts:detail' post.pk %}" class="btn btn-outline-primary">더 보기</a>
+            </div>
+            <div class="card-footer text-muted">
+                작성일 {{ post.created_at|date:"F d, Y" }}
+            </div>
+
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <p>게시글이 없습니다.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %} 

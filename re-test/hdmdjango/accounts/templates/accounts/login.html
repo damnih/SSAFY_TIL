@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}로그인{% endblock title %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title text-center mb-4">로그인</h1>
+                <form method="POST">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="mb-3">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        {{ field.errors }}
+                        {{ field }}
+                    </div>
+                    {% endfor %}
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">로그인</button>
+                        <a href="{% url 'accounts:signup' %}" class="btn btn-outline-secondary">계정이 없습니까? 회원가입</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %} 
