@@ -1,0 +1,55 @@
+<!-- lifecycle-hooks.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+    <button @click="count++">Add 1</button>
+    <p>Count: {{ count }}</p>
+    <p>{{ message }}</p>
+  </div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script>
+    const { createApp, ref, onMounted, onUpdated } = Vue
+
+    const app = createApp({
+      setup() {
+        const count = ref(0)
+        const message = ref(null)
+
+        // onMounted(() => {
+        //   console.log('mounted')
+        // })
+
+        onUpdated(() => {
+          message.value = 'updated!'
+        })
+
+        // 비동기적으로 작성한 lifecycle hook 예시
+        // setTimeout(() => {
+        //   onMounted(() => {
+        //     console.log('이 코드는 실행되지 않습니다!')
+        //   })
+        // }, 100)
+
+        return {
+          count,
+          message
+        }
+      },
+    })
+
+    app.mount('#app')
+
+  </script>
+</body>
+
+</html>

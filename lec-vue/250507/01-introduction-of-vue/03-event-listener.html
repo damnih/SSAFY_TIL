@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+    <button v-on:click="increment">버튼</button>
+    <p>{{ number }}</p>
+    <p>{{ number }}</p>
+    <p>{{ number }}</p>
+  </div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script>
+    const { createApp, ref } = Vue
+
+    const app = createApp({
+      setup() {
+        const number = ref(0)
+        const increment = function () {
+          // console.log(number) // ref 객체
+          number.value++
+        }
+        return {
+          number,
+          increment
+        }
+      }
+    })
+
+    app.mount('#app')
+    
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+    <!-- unwrap 문제 상황 -->
+    <p>{{ object.id + 1}}</p>
+
+    <!-- 해결책 : ref가 최상위 속성이 되어야 함 -->
+    <p>{{ id + 1 }}</p>
+
+    <!-- 단, ref가 {{}}의 최종 평가 값인 경우는 unwrap 가능 -->
+    <p>{{ object.id }}</p>
+  </div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script>
+    const { createApp, ref } = Vue
+
+    const app = createApp({
+      setup() {
+        const object = {
+          id: ref(0)
+        }
+        const { id } = object
+        return {
+          object,
+          id
+        }
+      }
+    })
+
+    app.mount('#app')
+  </script>
+</body>
+
+</html>

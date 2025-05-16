@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <!-- 이 영역에서는 Vue의 instance로 관리 -->
+  <div id="app"> 
+    <p>{{ message }}</p>
+    <!-- 사용자와의 상호작용 -->
+    <button
+      v-on:click="count++" 
+    >
+      Count is {{ count }} 
+    </button>
+  </div>
+
+  <div id="app-2">
+    <h1>{{ username }}</h1>
+  </div>
+
+  <!-- Vue CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script>
+    // console.log(Vue)
+    // Vue.createApp()
+    // const createApp = Vue.createApp
+    // Vue가 가지고 있는 다양한 메서드와 property 등을 여러 개 가져와서 쓸 것 
+    // const ref = Vue.ref 
+    const { createApp, ref } = Vue 
+    // 위의 이건 객체분리할당 
+    const app = createApp({
+      // setup 함수 
+      setup() {
+        // 상태 관리 
+        // 이 메세지도 반응형으로 바꿔준다 
+        const message = ref('hello, Vue')
+        // 이렇게 되면 그냥 자스로 조건문 쓰면 됨 
+        // 키값에 대한 밸류를 바꾸면 되는거임 
+        // 코드 하나만 두고 입력에 따라 밸류값 변경하면 굿굿 
+
+        // 우린 이제 이걸 컴포넌트로 구분해서 만들어볼거임 
+        // 담주내용임 ㅎ 
+
+        // 사용자와의 상호작용으로 변경되거나 관리해야하는 상태는 
+        // 반응성 객체를 사용해서 별도로 관리
+        // Vue가 가지고 있는 ref를 사용해서 변수를 선언 
+        const count = ref(0)
+        // const count = 0 
+        console.log(count)
+        // setup 함수가 하는 일은 한개의 object를 리턴 
+        return {
+          // 객체의 키값이랑 밸류가 같으면 축약 가능하다 
+          // message: message
+          message, 
+          count 
+        }
+      }
+    })
+    
+    const app2 = createApp({
+      setup() {
+        const username = ref('Alice')
+        return {
+          username
+        }
+      }
+    })
+    app2.mount('#app-2')
+
+
+    console.log(createApp)
+
+
+
+  </script>
+</body>
+</html>
